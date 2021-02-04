@@ -44,16 +44,16 @@ app.layout = html.Div(
         html.Div(
             className="pkcalc-banner",
             children=[
-                html.A(
-                    id="dash-logo",
-                    children=[html.Img(src=app.get_asset_url("dash-bio-logo.png"))],
-                    href="/Portal",
-                ),
-                html.H2("Noncompartmental Pharmacokinetics Analysis"),
+                # html.A(
+                #     id="dash-logo",
+                #     children=[html.Img(src=app.get_asset_url("dash-bio-logo.png"))],
+                #     href="/Portal",
+                # ),
+                html.H2("Visualize Conference Diversity"),
                 html.A(
                     id="gh-link",
                     children=["View on GitHub"],
-                    href="https://github.com/plotly/dash-sample-apps/tree/master/apps/dash-pk-calc",
+                    href="https://github.com/firasm/dash-demographics",
                     style={"color": "white", "border": "solid 1px white"},
                 ),
                 html.Img(src=app.get_asset_url("GitHub-Mark-Light-64px.png")),
@@ -69,12 +69,12 @@ app.layout = html.Div(
                         html.Div(
                             className="four columns pkcalc-settings",
                             children=[
-                                html.P(["Study Design"]),
+                                html.P(["Set-up your plot"]),
                                 html.Div(
                                     [
                                         html.Label(
                                             [
-                                                html.Div(["Time points"]),
+                                                html.Div(["Number of Years"]),
                                                 dcc.Input(
                                                     id="times-input",
                                                     placeholder="Enter a value...",
@@ -88,7 +88,7 @@ app.layout = html.Div(
                                         ),
                                         html.Label(
                                             [
-                                                html.Div(["Subjects"]),
+                                                html.Div(["Equity-Deserving Groups"]),
                                                 dcc.Input(
                                                     id="subjects-input",
                                                     placeholder="Enter a value...",
@@ -111,7 +111,7 @@ app.layout = html.Div(
                                     id="data-table",
                                     columns=[
                                         {
-                                            "name": "Time (hr)",
+                                            "name": "Year",
                                             "id": "time",
                                             "type": "numeric",
                                         }
@@ -175,9 +175,9 @@ app.layout = html.Div(
     [State("data-table", "data")],
 )
 def update_data_table(subjects, rows, records):
-    columns = [{"name": "Time (hr)", "id": "time", "type": "numeric"}] + [
+    columns = [{"name": "Year", "id": "time", "type": "numeric"}] + [
         {
-            "name": "Subj{} Conc (uM)".format(subject + 1),
+            "name": "EDG {}".format(subject + 1),
             "id": str(subject),
             "type": "numeric",
         }
@@ -226,7 +226,7 @@ def update_output(records):
             go.Scatter(
                 x=df["time"],
                 y=df["conc"],
-                name="Subj{}".format(subject + 1),
+                name="EDG {}".format(subject + 1),
                 mode="lines+markers",
             )
         )
@@ -235,23 +235,34 @@ def update_output(records):
     figure = go.Figure(
         data=fig_data,
         layout=go.Layout(
-            xaxis=dict(zeroline=False),
-            yaxis=dict(
+            xaxis=dict(      
                 title=dict(
-                    text="Conc (uM)",
+                    text="Year",
                     font=dict(
                         family='"Open Sans", "HelveticaNeue", "Helvetica Neue",'
                         " Helvetica, Arial, sans-serif",
                         size=12,
                     ),
                 ),
-                type="log",
                 rangemode="tozero",
                 zeroline=False,
-                showticklabels=False,
+                showticklabels=True,
+            ),
+            yaxis=dict(
+                title=dict(
+                    text="Number",
+                    font=dict(
+                        family='"Open Sans", "HelveticaNeue", "Helvetica Neue",'
+                        " Helvetica, Arial, sans-serif",
+                        size=12,
+                    ),
+                ),
+                rangemode="tozero",
+                zeroline=False,
+                showticklabels=True,
             ),
             margin=dict(l=40, r=30, b=50, t=50),
-            showlegend=False,
+            showlegend=True,
             height=294,
             paper_bgcolor="rgb(245, 247, 249)",
             plot_bgcolor="rgb(245, 247, 249)",
@@ -261,7 +272,7 @@ def update_output(records):
         [{"name": "Parameter", "id": "param"}]
         + [
             {
-                "name": "Subj{}".format(subject + 1),
+                "name": "EDG {}".format(subject + 1),
                 "id": str(subject),
                 "type": "numeric",
             }
