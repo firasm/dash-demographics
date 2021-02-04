@@ -36,7 +36,7 @@ APP_PATH = str(pl.Path(__file__).parent.resolve())
 pkdata = pd.read_csv(os.path.join(APP_PATH, os.path.join("data", "pkdata.csv")))
 
 n_subjects = len(pkdata.subject_index.unique())
-n_times = len(pkdata.time.unique())
+n_times = len(pkdata["time"].unique())
 
 app.layout = html.Div(
     className="",
@@ -111,14 +111,14 @@ app.layout = html.Div(
                                     id="data-table",
                                     columns=[
                                         {
-                                            "name": "Year",
+                                            "name": "Year (y)",
                                             "id": "time",
                                             "type": "numeric",
                                         }
                                     ]
                                     + [
                                         {
-                                            "name": "Conc{} (uM)".format(subject),
+                                            "name": "EDG {}".format(subject),
                                             "id": str(subject),
                                             "type": "numeric",
                                         }
@@ -138,29 +138,29 @@ app.layout = html.Div(
                     className="row",
                     children=[
                         html.Div(
-                            className="six columns",
+                            className="twelve columns",
                             children=[dcc.Graph(id="results-graph")],
                         ),
-                        html.Div(
-                            className="six columns pkcalc-results-table",
-                            children=[
-                                dash_table.DataTable(
-                                    id="results-table",
-                                    style_header=table_header_style,
-                                    style_data_conditional=[
-                                        {
-                                            "if": {"column_id": "param"},
-                                            "textAlign": "right",
-                                            "paddingRight": 10,
-                                        },
-                                        {
-                                            "if": {"row_index": "odd"},
-                                            "backgroundColor": "white",
-                                        },
-                                    ],
-                                )
-                            ],
-                        ),
+                        # html.Div(
+                        #     className="six columns pkcalc-results-table",
+                        #     children=[
+                        #         dash_table.DataTable(
+                        #             id="results-table",
+                        #             style_header=table_header_style,
+                        #             style_data_conditional=[
+                        #                 {
+                        #                     "if": {"column_id": "param"},
+                        #                     "textAlign": "right",
+                        #                     "paddingRight": 10,
+                        #                 },
+                        #                 {
+                        #                     "if": {"row_index": "odd"},
+                        #                     "backgroundColor": "white",
+                        #                 },
+                        #             ],
+                        #         )
+                        #     ],
+                        # ),
                     ],
                 ),
             ],
@@ -203,11 +203,11 @@ def update_data_table(subjects, rows, records):
 
 
 @app.callback(
-    [
+#    [
         Output("results-graph", "figure"),
-        Output("results-table", "columns"),
-        Output("results-table", "data"),
-    ],
+        # Output("results-table", "columns"),
+        # Output("results-table", "data"),
+#    ],
     [Input("data-table", "data")],
 )
 def update_output(records):
@@ -250,7 +250,7 @@ def update_output(records):
             ),
             yaxis=dict(
                 title=dict(
-                    text="Number",
+                    text="Numbers",
                     font=dict(
                         family='"Open Sans", "HelveticaNeue", "Helvetica Neue",'
                         " Helvetica, Arial, sans-serif",
@@ -281,12 +281,12 @@ def update_output(records):
         + [{"name": "Mean", "id": "mean"}, {"name": "StDev", "id": "stdev"}]
     )
     result_names = OrderedDict(
-        t_half="T½ (hr)",
-        auc0_t="AUC_0-t (uM*hr)",
-        auc0_inf="AUC_0-inf (uM*hr)",
-        percent_extrap="%Extrap",
-        c_max="Cmax (uM)",
-        t_max="Tmax (hr)",
+        # t_half="T½ (hr)",
+        # auc0_t="AUC_0-t (uM*hr)",
+        # auc0_inf="AUC_0-inf (uM*hr)",
+        # percent_extrap="%Extrap",
+        # c_max="Cmax (uM)",
+        # t_max="Tmax (hr)",
     )
 
     data = []
@@ -309,7 +309,7 @@ def update_output(records):
             d["stdev"] = None
         data.append(d)
 
-    return figure, columns, data
+    return figure#, columns, data
 
 
 if __name__ == "__main__":
