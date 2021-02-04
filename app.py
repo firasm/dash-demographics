@@ -244,7 +244,8 @@ def update_output(records):
                         size=12,
                     ),
                 ),
-                rangemode="tozero",
+                #rangemode="tozero",
+                dtick=1,
                 zeroline=False,
                 showticklabels=True,
             ),
@@ -263,9 +264,10 @@ def update_output(records):
             ),
             margin=dict(l=40, r=30, b=50, t=50),
             showlegend=True,
-            height=294,
-            paper_bgcolor="rgb(245, 247, 249)",
-            plot_bgcolor="rgb(245, 247, 249)",
+            height=450,
+            paper_bgcolor="rgb(255, 255, 255)",
+            plot_bgcolor="rgb(255, 255, 255)",
+            title="Participation of Equity-Deserving Groups (EDG) over Time",
         ),
     )
     columns = (
